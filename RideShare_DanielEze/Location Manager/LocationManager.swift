@@ -64,7 +64,7 @@ class LocationManager: NSObject {
 private extension LocationManager {
     func configure() {
         locationManager.delegate = self
-        locationManager.distanceFilter = 2000
+        locationManager.distanceFilter = 3700
     }
 }
 
