@@ -33,7 +33,6 @@ class RideHistoryViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(RideHistoryCell.self, forCellReuseIdentifier: RideHistoryCell.description())
-        tableView.contentSize = RideHistoryCell.size
         return tableView
     }()
 
