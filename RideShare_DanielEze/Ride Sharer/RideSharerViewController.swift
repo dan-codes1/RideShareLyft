@@ -79,12 +79,20 @@ private extension RideSharerViewController {
     }
 
     @objc func didUpdateLocation() {
-        guard let location = locationManager.location else { return }
-        let region = MKCoordinateRegion(center: location,
+        guard let coordinate = locationManager.coordinate else { return }
+        let region = MKCoordinateRegion(center: coordinate,
                                         span: .init(latitudeDelta: 0.5, longitudeDelta: 0.5)
         )
+        for annotaion in mapView.annotations {
+            mapView.removeAnnotation(annotaion)
+        }
+        let annotation = MKPointAnnotation()
+        annotation.title = "You're here!"
+        annotation.coordinate = coordinate
+
         DispatchQueue.main.async { [weak self] in
             self?.mapView.setRegion(region, animated: true)
+            self?.mapView.addAnnotation(annotation)
         }
     }
 
@@ -119,18 +127,7 @@ private extension RideSharerViewController {
     }
 
 }
+
 extension RideSharerViewController: MKMapViewDelegate {
-    func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
-        for annotaion in mapView.annotations {
-            mapView.removeAnnotation(annotaion)
-        }
-        let annotation = MKPointAnnotation()
-        annotation.title = "You're here!"
-        annotation.coordinate = userLocation.coordinate
-
-        DispatchQueue.main.async {
-            mapView.addAnnotation(annotation)
-        }
-    }
-
+    
 }

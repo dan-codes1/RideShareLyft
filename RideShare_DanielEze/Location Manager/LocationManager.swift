@@ -11,19 +11,21 @@ import CoreLocation
 import UIKit
 
 class LocationManager: NSObject {
-    private let locationManager = CLLocationManager()
-    private (set) var location: CLLocationCoordinate2D?
-    private (set) var adress: CLLocation?
+    private let manager = CLLocationManager()
+    private (set) var location: CLLocation?
 
     override init() {
         super.init()
         self.location = nil
-        self.adress = nil
         configure()
     }
 
     var authorizationStatus: CLAuthorizationStatus {
-        locationManager.authorizationStatus
+        manager.authorizationStatus
+    }
+
+    var coordinate: CLLocationCoordinate2D? {
+        location?.coordinate
     }
 
     func takeUserToSettingsPage() {
@@ -33,46 +35,15 @@ class LocationManager: NSObject {
 
     func requestLocation() {
         DispatchQueue.main.async { [weak self] in
-            self?.locationManager.requestAlwaysAuthorization()
+            self?.manager.requestAlwaysAuthorization()
         }
     }
 
     func checkAuthStatus() {
-        let authStatus = locationManager.authorizationStatus
+        let authStatus = manager.authorizationStatus
         switch authStatus {
             case .authorizedWhenInUse:
-                locationManager.startMonitoringSignificantLocationChanges()
-                break
-                
-            case .restricted, .denied:
-                NotificationCenter.default.post(name: .didRejectLocation, object: nil)
-                break
-                
-            case .notDetermined:
-                locationManager.requestAlwaysAuthorization()
-                break
-
-            case .authorizedAlways:
-                locationManager.startMonitoringSignificantLocationChanges()
-
-            default:
-                break
-        }
-    }
-}
-
-private extension LocationManager {
-    func configure() {
-        locationManager.delegate = self
-        locationManager.distanceFilter = 2500
-    }
-}
-
-extension LocationManager: CLLocationManagerDelegate {
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        switch manager.authorizationStatus {
-            case .authorizedWhenInUse:
-                manager.startMonitoringSignificantLocationChanges()
+                manager.startUpdatingLocation()
                 break
                 
             case .restricted, .denied:
@@ -84,18 +55,71 @@ extension LocationManager: CLLocationManagerDelegate {
                 break
 
             case .authorizedAlways:
-                manager.startMonitoringSignificantLocationChanges()
+                manager.startUpdatingLocation()
 
             default:
-                manager.startMonitoringSignificantLocationChanges()
+                break
+        }
+    }
+}
+
+private extension LocationManager {
+    func configure() {
+        manager.delegate = self
+    }
+
+    func updateLocation(using location: CLLocation) {
+        if let currLocation = self.location {
+            guard (absDifferenceInLatitude(currLocation.coordinate, location.coordinate) > 0.01) || (absDifferenceInLongitude(currLocation.coordinate, location.coordinate) > 0.01) else {
+                return
+            }
+            self.location = location
+            NotificationCenter.default.post(name: .didUpdateLocation, object: nil)
+        } else {
+            self.location = location
+            NotificationCenter.default.post(name: .didUpdateLocation, object: nil)
+        }
+    }
+
+    func absDifferenceInLatitude(_ coordinate1: CLLocationCoordinate2D, _ coordinate2: CLLocationCoordinate2D) -> Double {
+        print(abs(coordinate1.latitude - coordinate2.latitude))
+        return abs(coordinate1.latitude - coordinate2.latitude)
+    }
+
+    func absDifferenceInLongitude(_ coordinate1: CLLocationCoordinate2D, _ coordinate2: CLLocationCoordinate2D) -> Double {
+        print(abs(coordinate1.longitude - coordinate2.longitude))
+        return abs(coordinate1.longitude - coordinate2.longitude)
+    }
+}
+
+extension LocationManager: CLLocationManagerDelegate {
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        switch manager.authorizationStatus {
+            case .authorizedWhenInUse:
+                manager.startUpdatingLocation()
+                break
+                
+            case .restricted, .denied:
+                NotificationCenter.default.post(name: .didRejectLocation, object: nil)
+                break
+                
+            case .notDetermined:
+                manager.requestAlwaysAuthorization()
+                break
+
+            case .authorizedAlways:
+                manager.startUpdatingLocation()
+
+            default:
+                manager.startUpdatingLocation()
                 break
         }
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        location = locations.first?.coordinate
-        adress = locations.first
-        NotificationCenter.default.post(name: .didUpdateLocation, object: nil)
+        if let location = locations.first {
+            updateLocation(using: location)
+        }
     }
 
 }
