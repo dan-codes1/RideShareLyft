@@ -17,7 +17,7 @@ class RideSharerViewController: UIViewController {
     private lazy var titleLabel: UILabel = {
         let label = UILabel(frame: .zero)
         label.useAutoLayout()
-        label.text = "Ride Sharer"
+        label.text = "Ride Sharer 🚙"
         label.font = .boldSystemFont(ofSize: 25)
         label.textAlignment = .left
         return label
@@ -47,7 +47,7 @@ class RideSharerViewController: UIViewController {
     private lazy var rideHistoryButton: UIButton = {
         let button = UIButton(frame: .zero)
         button.useAutoLayout()
-        button.setTitle("Ride History", for: .normal)
+        button.setTitle("History 🕗", for: .normal)
         button.setTitleColor(.blue, for: .normal)
         button.addTarget(self, action: #selector(navigateToRideHistory), for: .touchUpInside)
         return button
