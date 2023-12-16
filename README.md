@@ -3,9 +3,6 @@
 ## Description
 This app shows the user their current location on a map. It also shows the user's ride history.
 
-## Author
-Daniel Eze
-
 ## BUGS
 There is a known bug (warning) with a decsription:
     
@@ -16,6 +13,8 @@ There is a known bug (warning) with a decsription:
 I was unable to, due to the fact that I'm working with time, find the solution to the warning. 
 The warning however does not affect the app's performance.
 
+## Author
+Daniel Eze
 
 ## Date
 DEC 15
