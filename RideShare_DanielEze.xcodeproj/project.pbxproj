@@ -15,6 +15,9 @@
 		A8E25CAE2B2D05F300451F48 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E25CAD2B2D05F300451F48 /* View+Extension.swift */; };
 		A8E25CB02B2D06E800451F48 /* RideHistoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E25CAF2B2D06E800451F48 /* RideHistoryCell.swift */; };
 		A8E25CB22B2D077500451F48 /* RideHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E25CB12B2D077500451F48 /* RideHistory.swift */; };
+		A8E25CBE2B2D2BB300451F48 /* RideSharerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E25CBD2B2D2BB300451F48 /* RideSharerViewController.swift */; };
+		A8E25CC12B2D2C3300451F48 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E25CC02B2D2C3300451F48 /* LocationManager.swift */; };
+		A8E25CC42B2D4BC700451F48 /* Notification.Name+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E25CC32B2D4BC700451F48 /* Notification.Name+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +31,9 @@
 		A8E25CAD2B2D05F300451F48 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
 		A8E25CAF2B2D06E800451F48 /* RideHistoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RideHistoryCell.swift; sourceTree = "<group>"; };
 		A8E25CB12B2D077500451F48 /* RideHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RideHistory.swift; sourceTree = "<group>"; };
+		A8E25CBD2B2D2BB300451F48 /* RideSharerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RideSharerViewController.swift; sourceTree = "<group>"; };
+		A8E25CC02B2D2C3300451F48 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		A8E25CC32B2D4BC700451F48 /* Notification.Name+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification.Name+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,7 +67,9 @@
 			isa = PBXGroup;
 			children = (
 				A8E25CAC2B2D05BD00451F48 /* Extensions */,
+				A8E25CBF2B2D2C1000451F48 /* Location Manager */,
 				A8E25CA92B2D048B00451F48 /* Ride History */,
+				A8E25CBC2B2D2B9900451F48 /* Ride Sharer */,
 				A8E25C952B2D039700451F48 /* AppDelegate.swift */,
 				A8E25C972B2D039700451F48 /* SceneDelegate.swift */,
 				A8E25C9E2B2D039800451F48 /* Assets.xcassets */,
@@ -85,8 +93,25 @@
 			isa = PBXGroup;
 			children = (
 				A8E25CAD2B2D05F300451F48 /* View+Extension.swift */,
+				A8E25CC32B2D4BC700451F48 /* Notification.Name+Extension.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		A8E25CBC2B2D2B9900451F48 /* Ride Sharer */ = {
+			isa = PBXGroup;
+			children = (
+				A8E25CBD2B2D2BB300451F48 /* RideSharerViewController.swift */,
+			);
+			path = "Ride Sharer";
+			sourceTree = "<group>";
+		};
+		A8E25CBF2B2D2C1000451F48 /* Location Manager */ = {
+			isa = PBXGroup;
+			children = (
+				A8E25CC02B2D2C3300451F48 /* LocationManager.swift */,
+			);
+			path = "Location Manager";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -160,10 +185,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A8E25CBE2B2D2BB300451F48 /* RideSharerViewController.swift in Sources */,
 				A8E25C962B2D039700451F48 /* AppDelegate.swift in Sources */,
 				A8E25CAE2B2D05F300451F48 /* View+Extension.swift in Sources */,
 				A8E25C982B2D039700451F48 /* SceneDelegate.swift in Sources */,
+				A8E25CC12B2D2C3300451F48 /* LocationManager.swift in Sources */,
 				A8E25CB02B2D06E800451F48 /* RideHistoryCell.swift in Sources */,
+				A8E25CC42B2D4BC700451F48 /* Notification.Name+Extension.swift in Sources */,
 				A8E25CB22B2D077500451F48 /* RideHistory.swift in Sources */,
 				A8E25CAB2B2D04B000451F48 /* RideHistoryViewController.swift in Sources */,
 			);
@@ -312,6 +340,9 @@
 				DEVELOPMENT_TEAM = 68JF3R62T9;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RideShare_DanielEze/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We want to get you a ride!";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "We want to be able to get you a ride!";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We want to be able to get you a ride!";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
@@ -342,6 +373,9 @@
 				DEVELOPMENT_TEAM = 68JF3R62T9;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RideShare_DanielEze/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We want to get you a ride!";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "We want to be able to get you a ride!";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We want to be able to get you a ride!";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
