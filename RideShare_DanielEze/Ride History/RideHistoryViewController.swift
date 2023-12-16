@@ -21,7 +21,7 @@ class RideHistoryViewController: UIViewController {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.useAutoLayout()
-        label.text = "Ride History"
+        label.text = "Ride History 🕗"
         label.font = .boldSystemFont(ofSize: 25)
         label.textAlignment = .left
         return label
