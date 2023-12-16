@@ -18,6 +18,15 @@ class RideHistoryViewController: UIViewController {
                        ("Driver: Michelle, 01/19/2022", "$8.50")
     ]
 
+    private lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.useAutoLayout()
+        label.text = "Ride History"
+        label.font = .boldSystemFont(ofSize: 25)
+        label.textAlignment = .left
+        return label
+    }()
+
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero)
         tableView.useAutoLayout()
@@ -26,14 +35,6 @@ class RideHistoryViewController: UIViewController {
         tableView.register(RideHistoryCell.self, forCellReuseIdentifier: RideHistoryCell.description())
         tableView.contentSize = RideHistoryCell.size
         return tableView
-    }()
-
-    private lazy var titleTextView: UILabel = {
-        let textView = UILabel(frame: .zero)
-        textView.useAutoLayout()
-        textView.text = "Ride History"
-        textView.font = .preferredFont(forTextStyle: .largeTitle)
-        return textView
     }()
 
     private lazy var stackView: UIStackView = {
@@ -52,17 +53,16 @@ class RideHistoryViewController: UIViewController {
 
 private extension RideHistoryViewController {
     func layout() {
-        view.useAutoLayout()
         view.backgroundColor = .white
         view.addSubview(tableView)
-        view.addSubview(titleTextView)
+        view.addSubview(titleLabel)
 
         let margins = view.layoutMarginsGuide
         let constraints: [NSLayoutConstraint] = [
-            titleTextView.topAnchor.constraint(equalTo: margins.topAnchor),
-            titleTextView.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
-            
-            tableView.topAnchor.constraint(equalTo: titleTextView.bottomAnchor, constant: 20),
+            titleLabel.topAnchor.constraint(equalTo: margins.topAnchor, constant: 30),
+            titleLabel.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
+
+            tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
             tableView.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: margins.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: margins.bottomAnchor),
@@ -83,7 +83,10 @@ private extension RideHistoryViewController {
                                       preferredStyle: .alert
         )
         alert.addAction(.init(title: "OK", style: .cancel))
-        present(alert, animated: true)
+
+        DispatchQueue.main.async { [weak self] in
+            self?.present(alert, animated: true)
+        }
     }
 }
 
