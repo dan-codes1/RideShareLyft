@@ -97,13 +97,17 @@ extension RideHistoryViewController: UITableViewDelegate, UITableViewDataSource 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: RideHistoryCell.description(), for: indexPath) as! RideHistoryCell
         let rideHistory = createRideHistory(at: indexPath.row)
-        cell.setData(using: rideHistory)
+        DispatchQueue.main.async {
+            cell.setData(using: rideHistory)
+        }
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         showAlert(using: createRideHistory(at: indexPath.row))
-        tableView.deselectRow(at: indexPath, animated: true)
+        DispatchQueue.main.async {
+            tableView.deselectRow(at: indexPath, animated: true)
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

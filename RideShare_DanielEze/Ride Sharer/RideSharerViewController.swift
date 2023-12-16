@@ -66,26 +66,24 @@ private extension RideSharerViewController {
     }
 
     @objc func showLocationAlert() {
+        let ok = UIAlertAction(title: "Go to settings", style: .default, handler: { [weak self] _ in
+            self?.locationManager.takeUserToSettingsPage()
+        })
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel)
+        let alert = UIAlertController(title: "Location Needed", message: "We need your location to book a ride", preferredStyle: .alert)
+        alert.addAction(ok)
+        alert.addAction(cancel)
         DispatchQueue.main.async { [weak self] in
-            let ok = UIAlertAction(title: "Get location", style: .default, handler: { [weak self] _ in
-                self?.locationManager.takeUserToSettingsPage()
-            })
-            let cancel = UIAlertAction(title: "Cancel", style: .cancel)
-            let alert = UIAlertController(title: "Location Needed", message: "We need your location to book a ride", preferredStyle: .alert)
-            alert.addAction(ok)
-            alert.addAction(cancel)
-
             self?.present(alert, animated: true)
         }
     }
 
     @objc func didUpdateLocation() {
         guard let location = locationManager.location else { return }
-
+        let region = MKCoordinateRegion(center: location,
+                                        span: .init(latitudeDelta: 0.5, longitudeDelta: 0.5)
+        )
         DispatchQueue.main.async { [weak self] in
-            let region = MKCoordinateRegion(center: location,
-                                            span: .init(latitudeDelta: 0.5, longitudeDelta: 0.5)
-            )
             self?.mapView.setRegion(region, animated: true)
         }
     }
@@ -123,13 +121,14 @@ private extension RideSharerViewController {
 }
 extension RideSharerViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
+        for annotaion in mapView.annotations {
+            mapView.removeAnnotation(annotaion)
+        }
+        let annotation = MKPointAnnotation()
+        annotation.title = "You're here!"
+        annotation.coordinate = userLocation.coordinate
+
         DispatchQueue.main.async {
-            for annotaion in mapView.annotations {
-                mapView.removeAnnotation(annotaion)
-            }
-            let annotation = MKPointAnnotation()
-            annotation.title = "You're here!"
-            annotation.coordinate = userLocation.coordinate
             mapView.addAnnotation(annotation)
         }
     }
