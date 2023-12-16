@@ -21,6 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         window = UIWindow(windowScene: scene)
         let rootController = RideSharerViewController()
+        window?.overrideUserInterfaceStyle = .light
         window?.rootViewController = rootController
         window?.makeKeyAndVisible()
     }
