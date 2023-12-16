@@ -16,6 +16,7 @@ class RideHistoryCell: UITableViewCell {
     func setData(using history: RideHistory) {
         driver.text = history.driver
         price.text = history.price
+        setNeedsLayout()
     }
 
     private lazy var driver: UILabel = {
@@ -41,8 +42,6 @@ class RideHistoryCell: UITableViewCell {
         stack.useAutoLayout()
         stack.axis = .vertical
         stack.distribution = .fillProportionally
-        stack.isLayoutMarginsRelativeArrangement = true
-        stack.spacing = 1
         return stack
     }()
 

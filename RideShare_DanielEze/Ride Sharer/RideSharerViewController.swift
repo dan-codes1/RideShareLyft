@@ -26,9 +26,7 @@ class RideSharerViewController: UIViewController {
     private lazy var titleStack: UIStackView = {
         let stackView = UIStackView(frame: .zero)
         stackView.axis = .horizontal
-        stackView.distribution = .fillProportionally
         stackView.useAutoLayout()
-        stackView.setContentHuggingPriority(.defaultLow, for: .horizontal)
         return stackView
     }()
 
@@ -36,8 +34,7 @@ class RideSharerViewController: UIViewController {
         let view: MKMapView = MKMapView(frame: .zero)
         view.useAutoLayout()
         view.showsUserLocation = true
-        view.showsScale = true
-        view.showsCompass = false
+        view.showsCompass = true
         view.isZoomEnabled =  true
         view.delegate = self
         view.layer.cornerRadius = 10
@@ -99,6 +96,7 @@ private extension RideSharerViewController {
         view.addSubview(mapView)
     
         titleStack.addArrangedSubview(titleLabel)
+        titleStack.addArrangedSubview(UIView())
         titleStack.addArrangedSubview(rideHistoryButton)
 
         let margins = view.layoutMarginsGuide
@@ -107,8 +105,6 @@ private extension RideSharerViewController {
             titleStack.topAnchor.constraint(equalTo: margins.topAnchor, constant: 20),
             titleStack.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
             titleStack.trailingAnchor.constraint(equalTo: margins.trailingAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: titleStack.leadingAnchor),
-            rideHistoryButton.trailingAnchor.constraint(equalTo: titleStack.trailingAnchor),
             mapView.topAnchor.constraint(equalTo: titleStack.bottomAnchor, constant: 20),
             mapView.trailingAnchor.constraint(equalTo: margins.trailingAnchor),
             mapView.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
