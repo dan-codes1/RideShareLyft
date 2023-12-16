@@ -41,7 +41,7 @@ class LocationManager: NSObject {
         let authStatus = locationManager.authorizationStatus
         switch authStatus {
             case .authorizedWhenInUse:
-                locationManager.startUpdatingLocation()
+                locationManager.startMonitoringSignificantLocationChanges()
                 break
                 
             case .restricted, .denied:
@@ -53,7 +53,7 @@ class LocationManager: NSObject {
                 break
 
             case .authorizedAlways:
-                locationManager.startUpdatingLocation()
+                locationManager.startMonitoringSignificantLocationChanges()
 
             default:
                 break
@@ -64,8 +64,7 @@ class LocationManager: NSObject {
 private extension LocationManager {
     func configure() {
         locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.distanceFilter = 200
+        locationManager.distanceFilter = 2500
     }
 }
 
@@ -73,7 +72,7 @@ extension LocationManager: CLLocationManagerDelegate {
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         switch manager.authorizationStatus {
             case .authorizedWhenInUse:
-                manager.startUpdatingLocation()
+                manager.startMonitoringSignificantLocationChanges()
                 break
                 
             case .restricted, .denied:
@@ -85,10 +84,10 @@ extension LocationManager: CLLocationManagerDelegate {
                 break
 
             case .authorizedAlways:
-                manager.startUpdatingLocation()
+                manager.startMonitoringSignificantLocationChanges()
 
             default:
-                manager.startUpdatingLocation()
+                manager.startMonitoringSignificantLocationChanges()
                 break
         }
     }
