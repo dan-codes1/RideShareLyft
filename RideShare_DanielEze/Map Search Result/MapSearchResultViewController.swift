@@ -1,5 +1,5 @@
 //
-//  RideHistoryViewController.swift
+//  MapSearchResultViewController.swift
 //  RideShare_DanielEze
 //
 //  Created by Daniel Eze on 2023-12-17.
@@ -77,9 +77,7 @@ class MapSearchResultViewController: UIViewController {
 
     @objc func keyboardWillShow(notification: NSNotification) {
         guard let keyBoardSize = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
-        guard let keyWindow = view.window?.windowScene?.keyWindow else {
-            return
-        }
+
         let contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyBoardSize.height, right: 0)
         tableView.contentInset = contentInset
     }
@@ -98,7 +96,7 @@ extension MapSearchResultViewController: UITableViewDelegate, UITableViewDataSou
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ResultCell.description(), for: indexPath) as! ResultCell
         let title = searchResults.lazy[indexPath.row].name ?? ""
-        let subtitle = searchResults.lazy[indexPath.row].name ?? " "
+        let subtitle = searchResults.lazy[indexPath.row].placemark.title ?? " "
 
         DispatchQueue.main.async {
             cell.setData(title, subtitle)

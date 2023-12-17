@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A85CCAE82B2ECF4B0061205A /* ResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85CCAE72B2ECF4B0061205A /* ResultCell.swift */; };
-		A89E6F052B2F964600E41C41 /* RideHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89E6F042B2F964600E41C41 /* RideHistoryViewController.swift */; };
+		A89E6F052B2F964600E41C41 /* MapSearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89E6F042B2F964600E41C41 /* MapSearchResultViewController.swift */; };
 		A8E25C962B2D039700451F48 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E25C952B2D039700451F48 /* AppDelegate.swift */; };
 		A8E25C982B2D039700451F48 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E25C972B2D039700451F48 /* SceneDelegate.swift */; };
 		A8E25C9F2B2D039800451F48 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8E25C9E2B2D039800451F48 /* Assets.xcassets */; };
@@ -24,7 +24,7 @@
 
 /* Begin PBXFileReference section */
 		A85CCAE72B2ECF4B0061205A /* ResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultCell.swift; sourceTree = "<group>"; };
-		A89E6F042B2F964600E41C41 /* RideHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RideHistoryViewController.swift; sourceTree = "<group>"; };
+		A89E6F042B2F964600E41C41 /* MapSearchResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSearchResultViewController.swift; sourceTree = "<group>"; };
 		A8E25C922B2D039700451F48 /* RideShare_DanielEze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RideShare_DanielEze.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8E25C952B2D039700451F48 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A8E25C972B2D039700451F48 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -55,7 +55,7 @@
 			isa = PBXGroup;
 			children = (
 				A85CCAE72B2ECF4B0061205A /* ResultCell.swift */,
-				A89E6F042B2F964600E41C41 /* RideHistoryViewController.swift */,
+				A89E6F042B2F964600E41C41 /* MapSearchResultViewController.swift */,
 			);
 			path = "Map Search Result";
 			sourceTree = "<group>";
@@ -200,7 +200,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A8E25CBE2B2D2BB300451F48 /* RideSharerViewController.swift in Sources */,
-				A89E6F052B2F964600E41C41 /* RideHistoryViewController.swift in Sources */,
+				A89E6F052B2F964600E41C41 /* MapSearchResultViewController.swift in Sources */,
 				A8E25C962B2D039700451F48 /* AppDelegate.swift in Sources */,
 				A8E25CAE2B2D05F300451F48 /* View+Extension.swift in Sources */,
 				A8E25C982B2D039700451F48 /* SceneDelegate.swift in Sources */,

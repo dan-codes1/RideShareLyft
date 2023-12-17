@@ -75,8 +75,8 @@ class RideSharerViewController: UIViewController {
         let request = MKLocalSearch.Request()
         if let location = locationManager.location {
             request.region = .init(center: location.coordinate,
-                                   latitudinalMeters: 30000,
-                                   longitudinalMeters: 30000
+                                   latitudinalMeters: 10000,
+                                   longitudinalMeters: 10000
             )
         }
         request.naturalLanguageQuery = term
