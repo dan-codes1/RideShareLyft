@@ -82,13 +82,11 @@ private extension LocationManager {
     }
 
     func absDifferenceInLatitude(_ coordinate1: CLLocationCoordinate2D, _ coordinate2: CLLocationCoordinate2D) -> Double {
-        print(abs(coordinate1.latitude - coordinate2.latitude))
-        return abs(coordinate1.latitude - coordinate2.latitude)
+        abs(coordinate1.latitude - coordinate2.latitude)
     }
 
     func absDifferenceInLongitude(_ coordinate1: CLLocationCoordinate2D, _ coordinate2: CLLocationCoordinate2D) -> Double {
-        print(abs(coordinate1.longitude - coordinate2.longitude))
-        return abs(coordinate1.longitude - coordinate2.longitude)
+        abs(coordinate1.longitude - coordinate2.longitude)
     }
 }
 
