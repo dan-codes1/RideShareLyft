@@ -14,9 +14,10 @@ class LocationManager: NSObject {
     private let manager = CLLocationManager()
     private (set) var location: CLLocation?
 
-    override init() {
+    static let shared = LocationManager()
+
+    private override init() {
         super.init()
-        self.location = nil
         configure()
     }
 
@@ -26,11 +27,6 @@ class LocationManager: NSObject {
 
     var coordinate: CLLocationCoordinate2D? {
         location?.coordinate
-    }
-
-    func takeUserToSettingsPage() {
-        guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
-        UIApplication.shared.open(url)
     }
 
     func requestLocation() {
@@ -88,6 +84,7 @@ private extension LocationManager {
     func absDifferenceInLongitude(_ coordinate1: CLLocationCoordinate2D, _ coordinate2: CLLocationCoordinate2D) -> Double {
         abs(coordinate1.longitude - coordinate2.longitude)
     }
+
 }
 
 extension LocationManager: CLLocationManagerDelegate {
