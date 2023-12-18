@@ -11,11 +11,9 @@ import UIKit
 import MapKit
 
 class RideSharerViewController: UIViewController {
-    private var isSearching = false
+    private lazy var didHandleRegectedLocationRequest = false
 
     private let locationManager = LocationManager.shared
-
-    private lazy var resultVC = MapSearchResultViewController()
 
     private lazy var titleLabel: UILabel = {
         let label = UILabel(frame: .zero)
@@ -54,6 +52,12 @@ class RideSharerViewController: UIViewController {
         search.showsSearchResultsController = true
         search.searchBar.placeholder = "Where do you want to go to?"
         return search
+    }()
+
+    private lazy var resultVC: MapSearchResultViewController = {
+        let vc = MapSearchResultViewController()
+        vc.updatemapSearchVC(using: self)
+        return vc
     }()
 
     override func viewDidLoad() {
@@ -127,14 +131,17 @@ class RideSharerViewController: UIViewController {
 
 private extension RideSharerViewController {
     func configure() {
-        NotificationCenter.default.addObserver(self, selector: #selector(showLocationAlert), name: .didRejectLocation, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didRejectLocationRequest), name: .didRejectLocationRequestRequest, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(didUpdateLocation), name: .didUpdateLocation, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(didAcceptLocationRequest), name: .didAcceptLocation, object: nil)
 
         navigationItem.leftBarButtonItem = .init(customView: titleLabel)
         navigationItem.rightBarButtonItem = .init(customView: rideHistoryButton)
 
-        resultVC.updatemapSearchVC(using: self)
+        if didHandleRegectedLocationRequest == false {
+            if locationManager.authorizationDenied {
+                didRejectLocationRequest()
+            }
+        }
     }
 
     func takeUserToSettingsPage() {
@@ -156,20 +163,16 @@ private extension RideSharerViewController {
         NSLayoutConstraint.activate(constraints)
     }
 
-    @objc func didAcceptLocationRequest() {
-
-    }
-
-    @objc func showLocationAlert() {
+    @objc func didRejectLocationRequest() {
         if navigationItem.searchController != nil {
             DispatchQueue.main.async { [weak self] in
-                UIView.animate(withDuration: 1.1, delay: 0.0, options: .beginFromCurrentState) {
+                UIView.animate(withDuration: 1.1, delay: 0.0, options: [.allowAnimatedContent, .beginFromCurrentState, .curveEaseInOut, .showHideTransitionViews,]) {
                     self?.navigationItem.searchController = nil
                     self?.view.layoutIfNeeded()
                 } completion: { _ in }
             }
         }
-
+        
         let ok = UIAlertAction(title: "Go to settings", style: .default, handler: { [weak self] _ in
             self?.takeUserToSettingsPage()
         })
@@ -183,7 +186,6 @@ private extension RideSharerViewController {
     }
 
     @objc func didUpdateLocation() {
-        
         guard let coordinate = locationManager.coordinate else { return }
         let region = MKCoordinateRegion(center: coordinate,
                                         span: .init(latitudeDelta: 0.24, longitudeDelta: 0.24)
@@ -193,7 +195,7 @@ private extension RideSharerViewController {
         }
         if navigationItem.searchController == nil {
             DispatchQueue.main.async { [weak self] in
-                UIView.animate(withDuration: 1.15, delay: 0, options: .beginFromCurrentState) {
+                UIView.animate(withDuration: 1.1, delay: 0.0, options: [.allowAnimatedContent, .beginFromCurrentState, .curveEaseInOut, .showHideTransitionViews]) {
                     self?.navigationItem.searchController = self?.searchVC
                     self?.view.layoutIfNeeded()
                 } completion: { _ in

@@ -19,11 +19,14 @@ class LocationManager: NSObject {
     private override init() {
         super.init()
         configure()
-        checkAuthStatus()
     }
 
     var authorizationStatus: CLAuthorizationStatus {
         manager.authorizationStatus
+    }
+
+    var authorizationDenied: Bool {
+        (manager.authorizationStatus == .denied) || (manager.authorizationStatus == .restricted)
     }
 
     var coordinate: CLLocationCoordinate2D? {
@@ -36,28 +39,28 @@ class LocationManager: NSObject {
         }
     }
 
-    func checkAuthStatus() {
-        let authStatus = manager.authorizationStatus
-        switch authStatus {
-            case .authorizedWhenInUse:
-                manager.startUpdatingLocation()
-                break
-                
-            case .restricted, .denied:
-                NotificationCenter.default.post(name: .didRejectLocation, object: nil)
-                break
-                
-            case .notDetermined:
-                manager.requestAlwaysAuthorization()
-                break
-
-            case .authorizedAlways:
-                manager.startUpdatingLocation()
-
-            default:
-                break
-        }
-    }
+//    func checkAuthStatus() {
+//        let authStatus = manager.authorizationStatus
+//        switch authStatus {
+//            case .authorizedWhenInUse:
+//                manager.startUpdatingLocation()
+//                break
+//                
+//            case .restricted, .denied:
+//                NotificationCenter.default.post(name: .didRejectLocationRequestRequest, object: nil)
+//                break
+//                
+//            case .notDetermined:
+//                manager.requestAlwaysAuthorization()
+//                break
+//
+//            case .authorizedAlways:
+//                manager.startUpdatingLocation()
+//
+//            default:
+//                break
+//        }
+//    }
 }
 
 private extension LocationManager {
@@ -92,20 +95,16 @@ extension LocationManager: CLLocationManagerDelegate {
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         switch manager.authorizationStatus {
             case .authorizedWhenInUse:
-                NotificationCenter.default.post(name: .didAcceptLocation, object: nil)
                 manager.startUpdatingLocation()
-                break
                 
             case .restricted, .denied:
-                NotificationCenter.default.post(name: .didRejectLocation, object: nil)
-                break
+                manager.requestAlwaysAuthorization()
+                NotificationCenter.default.post(name: .didRejectLocationRequestRequest, object: nil)
                 
             case .notDetermined:
                 manager.requestAlwaysAuthorization()
-                break
 
             case .authorizedAlways:
-                NotificationCenter.default.post(name: .didAcceptLocation, object: nil)
                 manager.startUpdatingLocation()
 
             default:
