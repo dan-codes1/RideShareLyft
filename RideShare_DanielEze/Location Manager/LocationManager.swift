@@ -19,6 +19,7 @@ class LocationManager: NSObject {
     private override init() {
         super.init()
         configure()
+        checkAuthStatus()
     }
 
     var authorizationStatus: CLAuthorizationStatus {
@@ -91,6 +92,7 @@ extension LocationManager: CLLocationManagerDelegate {
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         switch manager.authorizationStatus {
             case .authorizedWhenInUse:
+                NotificationCenter.default.post(name: .didAcceptLocation, object: nil)
                 manager.startUpdatingLocation()
                 break
                 
@@ -103,6 +105,7 @@ extension LocationManager: CLLocationManagerDelegate {
                 break
 
             case .authorizedAlways:
+                NotificationCenter.default.post(name: .didAcceptLocation, object: nil)
                 manager.startUpdatingLocation()
 
             default:

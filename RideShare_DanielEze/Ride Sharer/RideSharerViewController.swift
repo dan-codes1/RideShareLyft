@@ -26,11 +26,13 @@ class RideSharerViewController: UIViewController {
         return label
     }()
 
-    private lazy var titleStack: UIStackView = {
-        let stackView = UIStackView(frame: .zero)
-        stackView.axis = .horizontal
-        stackView.useAutoLayout()
-        return stackView
+    private lazy var rideHistoryButton: UIButton = {
+        let button = UIButton(frame: .zero)
+        button.useAutoLayout()
+        button.setTitle("History 🕗", for: .normal)
+        button.setTitleColor(.blue, for: .normal)
+        button.addTarget(self, action: #selector(navigateToRideHistory), for: .touchUpInside)
+        return button
     }()
 
     private lazy var mapView: MKMapView = {
@@ -52,15 +54,6 @@ class RideSharerViewController: UIViewController {
         search.showsSearchResultsController = true
         search.searchBar.placeholder = "Where do you want to go to?"
         return search
-    }()
-
-    private lazy var rideHistoryButton: UIButton = {
-        let button = UIButton(frame: .zero)
-        button.useAutoLayout()
-        button.setTitle("History 🕗", for: .normal)
-        button.setTitleColor(.blue, for: .normal)
-        button.addTarget(self, action: #selector(navigateToRideHistory), for: .touchUpInside)
-        return button
     }()
 
     override func viewDidLoad() {
@@ -97,16 +90,21 @@ class RideSharerViewController: UIViewController {
             mapView.removeAnnotation(annotaion)
         }
 
+        DispatchQueue.main.async { [weak self] in
+            for overlay in self?.mapView.overlays ?? [] {
+                self?.mapView.removeOverlay(overlay)
+            }
+            self?.mapView.addAnnotation(result.placemark)
+        }
+
+        guard let location = locationManager.location else { return }
+
         let directionRequest = MKDirections.Request()
-        directionRequest.source = .init(placemark: .init(coordinate: locationManager.coordinate ?? result.placemark.coordinate))
+        directionRequest.source = .init(placemark: .init(coordinate: location.coordinate))
         directionRequest.destination = result
         directionRequest.transportType = .automobile
         directionRequest.requestsAlternateRoutes = true
         let directions = MKDirections(request: directionRequest)
-
-        DispatchQueue.main.async { [weak self] in
-            self?.mapView.addAnnotation(result.placemark)
-        }
 
         Task { [weak self] in
             do {
@@ -124,17 +122,18 @@ class RideSharerViewController: UIViewController {
             }
         }
     }
+
 }
 
 private extension RideSharerViewController {
     func configure() {
         NotificationCenter.default.addObserver(self, selector: #selector(showLocationAlert), name: .didRejectLocation, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(didUpdateLocation), name: .didUpdateLocation, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didAcceptLocationRequest), name: .didAcceptLocation, object: nil)
 
-        navigationItem.titleView = titleStack
-        navigationItem.searchController = searchVC
+        navigationItem.leftBarButtonItem = .init(customView: titleLabel)
+        navigationItem.rightBarButtonItem = .init(customView: rideHistoryButton)
 
-        locationManager.checkAuthStatus()
         resultVC.updatemapSearchVC(using: self)
     }
 
@@ -146,13 +145,9 @@ private extension RideSharerViewController {
     func layout() {
         view.backgroundColor = .white
         view.addSubview(mapView)
-    
-        titleStack.addArrangedSubview(titleLabel)
-        titleStack.addArrangedSubview(UIView())
-        titleStack.addArrangedSubview(rideHistoryButton)
+        
         let margins = view.layoutMarginsGuide
         let constraints: [NSLayoutConstraint] = [
-            titleStack.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width),
             mapView.topAnchor.constraint(equalTo: margins.topAnchor, constant: 20),
             mapView.trailingAnchor.constraint(equalTo: margins.trailingAnchor),
             mapView.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
@@ -161,7 +156,12 @@ private extension RideSharerViewController {
         NSLayoutConstraint.activate(constraints)
     }
 
+    @objc func didAcceptLocationRequest() {
+
+    }
+
     @objc func showLocationAlert() {
+
         let ok = UIAlertAction(title: "Go to settings", style: .default, handler: { [weak self] _ in
             self?.takeUserToSettingsPage()
         })
@@ -171,16 +171,32 @@ private extension RideSharerViewController {
         alert.addAction(cancel)
         DispatchQueue.main.async { [weak self] in
             self?.present(alert, animated: true)
+            if self?.navigationItem.searchController == nil {
+                UIView.animate(withDuration: 1.15, delay: 0.1, options: .allowUserInteraction) {
+                    self?.navigationItem.searchController = self?.searchVC
+                    self?.view.layoutIfNeeded()
+                } completion: { _ in
+                }
+            }
         }
     }
 
     @objc func didUpdateLocation() {
+        
         guard let coordinate = locationManager.coordinate else { return }
         let region = MKCoordinateRegion(center: coordinate,
                                         span: .init(latitudeDelta: 0.5, longitudeDelta: 0.5)
         )
         DispatchQueue.main.async { [weak self] in
             self?.mapView.setRegion(region, animated: true)
+
+            if self?.navigationItem.searchController == nil {
+                UIView.animate(withDuration: 1.15, delay: 0.1, options: .allowUserInteraction) {
+                    self?.navigationItem.searchController = self?.searchVC
+                    self?.view.layoutIfNeeded()
+                } completion: { _ in
+                }
+            }
         }
     }
 
@@ -196,7 +212,7 @@ private extension RideSharerViewController {
 extension RideSharerViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let renderer = MKPolylineRenderer(polyline: overlay as! MKPolyline)
-        renderer.strokeColor = UIColor.blue
+        renderer.strokeColor = UIColor.systemPink.withAlphaComponent(0.6)
         return renderer
     }
 }
