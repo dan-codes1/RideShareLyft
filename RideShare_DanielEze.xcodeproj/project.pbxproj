@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A82E6DF72B2FA7FB0002FF13 /* UIScreen+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82E6DF62B2FA7FB0002FF13 /* UIScreen+Extension.swift */; };
+		A85CCAE82B2ECF4B0061205A /* ResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85CCAE72B2ECF4B0061205A /* ResultCell.swift */; };
+		A89E6F052B2F964600E41C41 /* MapSearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89E6F042B2F964600E41C41 /* MapSearchResultViewController.swift */; };
 		A8E25C962B2D039700451F48 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E25C952B2D039700451F48 /* AppDelegate.swift */; };
 		A8E25C982B2D039700451F48 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E25C972B2D039700451F48 /* SceneDelegate.swift */; };
 		A8E25C9F2B2D039800451F48 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8E25C9E2B2D039800451F48 /* Assets.xcassets */; };
@@ -21,6 +24,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A82E6DF62B2FA7FB0002FF13 /* UIScreen+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScreen+Extension.swift"; sourceTree = "<group>"; };
+		A85CCAE72B2ECF4B0061205A /* ResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultCell.swift; sourceTree = "<group>"; };
+		A89E6F042B2F964600E41C41 /* MapSearchResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSearchResultViewController.swift; sourceTree = "<group>"; };
 		A8E25C922B2D039700451F48 /* RideShare_DanielEze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RideShare_DanielEze.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8E25C952B2D039700451F48 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A8E25C972B2D039700451F48 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -47,6 +53,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A85CCAE62B2ECF1D0061205A /* Map Search Result */ = {
+			isa = PBXGroup;
+			children = (
+				A85CCAE72B2ECF4B0061205A /* ResultCell.swift */,
+				A89E6F042B2F964600E41C41 /* MapSearchResultViewController.swift */,
+			);
+			path = "Map Search Result";
+			sourceTree = "<group>";
+		};
 		A8E25C892B2D039700451F48 = {
 			isa = PBXGroup;
 			children = (
@@ -68,6 +83,7 @@
 			children = (
 				A8E25CAC2B2D05BD00451F48 /* Extensions */,
 				A8E25CBF2B2D2C1000451F48 /* Location Manager */,
+				A85CCAE62B2ECF1D0061205A /* Map Search Result */,
 				A8E25CA92B2D048B00451F48 /* Ride History */,
 				A8E25CBC2B2D2B9900451F48 /* Ride Sharer */,
 				A8E25C952B2D039700451F48 /* AppDelegate.swift */,
@@ -94,6 +110,7 @@
 			children = (
 				A8E25CAD2B2D05F300451F48 /* View+Extension.swift */,
 				A8E25CC32B2D4BC700451F48 /* Notification.Name+Extension.swift */,
+				A82E6DF62B2FA7FB0002FF13 /* UIScreen+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -186,13 +203,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				A8E25CBE2B2D2BB300451F48 /* RideSharerViewController.swift in Sources */,
+				A89E6F052B2F964600E41C41 /* MapSearchResultViewController.swift in Sources */,
 				A8E25C962B2D039700451F48 /* AppDelegate.swift in Sources */,
 				A8E25CAE2B2D05F300451F48 /* View+Extension.swift in Sources */,
 				A8E25C982B2D039700451F48 /* SceneDelegate.swift in Sources */,
+				A82E6DF72B2FA7FB0002FF13 /* UIScreen+Extension.swift in Sources */,
 				A8E25CC12B2D2C3300451F48 /* LocationManager.swift in Sources */,
 				A8E25CB02B2D06E800451F48 /* RideHistoryCell.swift in Sources */,
 				A8E25CC42B2D4BC700451F48 /* Notification.Name+Extension.swift in Sources */,
 				A8E25CB22B2D077500451F48 /* RideHistory.swift in Sources */,
+				A85CCAE82B2ECF4B0061205A /* ResultCell.swift in Sources */,
 				A8E25CAB2B2D04B000451F48 /* RideHistoryViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

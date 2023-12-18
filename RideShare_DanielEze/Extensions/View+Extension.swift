@@ -11,10 +11,6 @@ import UIKit
 
 extension UIView {
 
-    var screen: CGRect {
-        UIScreen.main.bounds
-    }
-
     func useAutoLayout() {
         translatesAutoresizingMaskIntoConstraints = false
     }

@@ -9,8 +9,8 @@
 import Foundation
 
 extension Notification.Name {
-
-    static let didRejectLocation = Notification.Name("didRejectLocation")
-    static let didUpdateLocation = Notification.Name("didUpddateLocation")
+    static let didAcceptLocation = Notification.Name("didAcceptLocationRequest")
+    static let didRejectLocation = Notification.Name("didRejectLocationRequest")
+    static let didUpdateLocation = Notification.Name("didUpddateLocationRequest")
 
 }
