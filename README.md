@@ -1,7 +1,7 @@
 # README
 
 ## Description
-This app shows the user their current location on a map. It also shows the user's ride history.
+This app shows the user their current location on a map and allows them to search and find multiple routes to a desination. It also shows the user's ride history.
 
 ## BUGS
 There is a known bug (warning) with a decsription:
