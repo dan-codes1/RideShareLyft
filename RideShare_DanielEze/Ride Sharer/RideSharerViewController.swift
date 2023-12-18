@@ -117,12 +117,15 @@ class RideSharerViewController: UIViewController {
         return []
     }
 
-    func didSelectResult(result: MKMapItem) {
+    func didSelectResult(result: MKMapItem, isFromHistory: Bool = false) {
         searchVC.searchBar.text = ""
         clearMap()
 
         DispatchQueue.main.async { [weak self] in
             self?.mapView.addAnnotation(result.placemark)
+        }
+        if isFromHistory == false {
+            searchHistory.append(result)
         }
 
         guard let location = locationManager.location else { return }
@@ -149,6 +152,10 @@ class RideSharerViewController: UIViewController {
                 }
             }
         }
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
 }
@@ -184,7 +191,7 @@ private extension RideSharerViewController {
 
         let margins = view.layoutMarginsGuide
         let constraints: [NSLayoutConstraint] = [
-            buttonStack.topAnchor.constraint(equalTo: margins.topAnchor, constant: 20),
+            buttonStack.topAnchor.constraint(equalTo: margins.topAnchor),
             buttonStack.trailingAnchor.constraint(equalTo: margins.trailingAnchor),
             buttonStack.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
             clearMapButon.leadingAnchor.constraint(equalTo: buttonStack.leadingAnchor),
@@ -238,7 +245,7 @@ private extension RideSharerViewController {
         }
         if navigationItem.searchController == nil {
             DispatchQueue.main.async { [weak self] in
-                UIView.animate(withDuration: 1.1, delay: 0.0, options: [.allowAnimatedContent, .beginFromCurrentState, .curveEaseInOut, .showHideTransitionViews]) {
+                UIView.animate(withDuration: 1.0, delay: 0.0, options: [.allowAnimatedContent, .beginFromCurrentState, .curveEaseOut, .showHideTransitionViews]) {
                     self?.navigationItem.searchController = self?.searchVC
                     self?.view.layoutIfNeeded()
                 } completion: { _ in
@@ -255,8 +262,8 @@ private extension RideSharerViewController {
     }
 
     @objc func navigateToSearchHistory() {
-        let searchHistoryVC = SearchHistoryViewController()
-        searchHistoryVC.updateRideShareVC(using: self)
+        let searchHistoryVC = SearchHistoryViewController(mapSearchVC: self)
+//        searchHistoryVC.updateRideShareVC(using: self)
         DispatchQueue.main.async { [weak self] in
             self?.present(searchHistoryVC, animated: true)
         }

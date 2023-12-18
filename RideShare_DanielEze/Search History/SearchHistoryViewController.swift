@@ -12,20 +12,18 @@ import UIKit
 
 class SearchHistoryViewController: UIViewController {
 
-    private lazy var reideShareVC: RideSharerViewController? = nil
-
-    var searchHistory: [MKMapItem] {
-        reideShareVC?.searchHistory ?? []
-    }
-
     private let locationManager = LocationManager.shared
 
     private var mapSearchVC: RideSharerViewController?
 
+    var searchHistory: [MKMapItem] {
+        mapSearchVC?.searchHistory ?? []
+    }
+
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.useAutoLayout()
-        label.text = "Search History 🔎 🕗"
+        label.text = "Search History 🔍 🕗"
         label.font = .boldSystemFont(ofSize: 25)
         label.textAlignment = .left
         return label
@@ -45,6 +43,15 @@ class SearchHistoryViewController: UIViewController {
         super.viewDidLoad()
         configure()
         layout()
+    }
+
+    init(mapSearchVC: RideSharerViewController? = nil) {
+        self.mapSearchVC = mapSearchVC
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -95,6 +102,9 @@ class SearchHistoryViewController: UIViewController {
         tableView.transform = .identity
     }
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 }
 
 extension SearchHistoryViewController: UITableViewDelegate, UITableViewDataSource {
@@ -114,8 +124,7 @@ extension SearchHistoryViewController: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        mapSearchVC?.didSelectResult(result: searchHistory[indexPath.row])
-        mapSearchVC?.didSelectResult(result: searchHistory[indexPath.row])
+        mapSearchVC?.didSelectResult(result: searchHistory[indexPath.row], isFromHistory: true)
 
         DispatchQueue.main.async { [weak self] in
             tableView.deselectRow(at: indexPath, animated: true)

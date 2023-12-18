@@ -86,6 +86,10 @@ class MapSearchResultViewController: UIViewController {
         tableView.transform = .identity
     }
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
 }
 
 extension MapSearchResultViewController: UITableViewDelegate, UITableViewDataSource {
@@ -107,7 +111,6 @@ extension MapSearchResultViewController: UITableViewDelegate, UITableViewDataSou
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         mapSearchVC?.didSelectResult(result: searchResults.lazy[indexPath.row])
 
-        mapSearchVC?.didSelectResult(result: searchResults.lazy[indexPath.row])
         DispatchQueue.main.async { [weak self] in
             tableView.deselectRow(at: indexPath, animated: true)
             self?.dismiss(animated: true)
