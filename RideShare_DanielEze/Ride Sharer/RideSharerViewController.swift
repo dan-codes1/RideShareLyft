@@ -12,6 +12,7 @@ import MapKit
 
 class RideSharerViewController: UIViewController {
     private lazy var didHandleRegectedLocationRequest = false
+    private (set) lazy var searchHistory: [MKMapItem] = []
 
     private let locationManager = LocationManager.shared
 
@@ -27,9 +28,38 @@ class RideSharerViewController: UIViewController {
     private lazy var rideHistoryButton: UIButton = {
         let button = UIButton(frame: .zero)
         button.useAutoLayout()
-        button.setTitle("History 🕗", for: .normal)
+        button.setTitle("Ride History", for: .normal)
+        button.titleLabel?.font = .preferredFont(forTextStyle: .subheadline)
         button.setTitleColor(.blue, for: .normal)
         button.addTarget(self, action: #selector(navigateToRideHistory), for: .touchUpInside)
+        return button
+    }()
+
+    private lazy var buttonStack: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .horizontal
+        stack.distribution = .equalCentering
+        stack.useAutoLayout()
+        return stack
+    }()
+
+    private lazy var clearMapButon: UIButton = {
+        let button = UIButton(frame: .zero)
+        button.useAutoLayout()
+        button.setTitle("Clear Map", for: .normal)
+        button.titleLabel?.font = .preferredFont(forTextStyle: .subheadline)
+        button.setTitleColor(.blue, for: .normal)
+        button.addTarget(self, action: #selector(didTapClearMap), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var searchHistoryButton: UIButton = {
+        let button = UIButton(frame: .zero)
+        button.useAutoLayout()
+        button.setTitle("Search History", for: .normal)
+        button.titleLabel?.font = .preferredFont(forTextStyle: .subheadline)
+        button.setTitleColor(.blue, for: .normal)
+        button.addTarget(self, action: #selector(navigateToSearchHistory), for: .touchUpInside)
         return button
     }()
 
@@ -87,18 +117,15 @@ class RideSharerViewController: UIViewController {
         return []
     }
 
-    func didSelectResult(result: MKMapItem) {
+    func didSelectResult(result: MKMapItem, isFromHistory: Bool = false) {
         searchVC.searchBar.text = ""
-
-        for annotaion in mapView.annotations {
-            mapView.removeAnnotation(annotaion)
-        }
+        clearMap()
 
         DispatchQueue.main.async { [weak self] in
-            for overlay in self?.mapView.overlays ?? [] {
-                self?.mapView.removeOverlay(overlay)
-            }
             self?.mapView.addAnnotation(result.placemark)
+        }
+        if isFromHistory == false {
+            searchHistory.append(result)
         }
 
         guard let location = locationManager.location else { return }
@@ -127,6 +154,10 @@ class RideSharerViewController: UIViewController {
         }
     }
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
 }
 
 private extension RideSharerViewController {
@@ -135,7 +166,7 @@ private extension RideSharerViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(didUpdateLocation), name: .didUpdateLocation, object: nil)
 
         navigationItem.leftBarButtonItem = .init(customView: titleLabel)
-        navigationItem.rightBarButtonItem = .init(customView: rideHistoryButton)
+        navigationItem.largeTitleDisplayMode = .always
 
         if didHandleRegectedLocationRequest == false {
             if locationManager.authorizationDenied {
@@ -152,15 +183,34 @@ private extension RideSharerViewController {
     func layout() {
         view.backgroundColor = .white
         view.addSubview(mapView)
-        
+        view.addSubview(buttonStack)
+
+        buttonStack.addArrangedSubview(clearMapButon)
+        buttonStack.addArrangedSubview(searchHistoryButton)
+        buttonStack.addArrangedSubview(rideHistoryButton)
+
         let margins = view.layoutMarginsGuide
         let constraints: [NSLayoutConstraint] = [
-            mapView.topAnchor.constraint(equalTo: margins.topAnchor, constant: 20),
+            buttonStack.topAnchor.constraint(equalTo: margins.topAnchor),
+            buttonStack.trailingAnchor.constraint(equalTo: margins.trailingAnchor),
+            buttonStack.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
+            clearMapButon.leadingAnchor.constraint(equalTo: buttonStack.leadingAnchor),
+
+            mapView.topAnchor.constraint(equalTo: buttonStack.bottomAnchor, constant: 20),
             mapView.trailingAnchor.constraint(equalTo: margins.trailingAnchor),
             mapView.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
             mapView.bottomAnchor.constraint(equalTo: margins.bottomAnchor),
         ]
         NSLayoutConstraint.activate(constraints)
+    }
+
+    func clearMap() {
+        for annotaion in mapView.annotations {
+            mapView.removeAnnotation(annotaion)
+        }
+        for overlay in mapView.overlays {
+            mapView.removeOverlay(overlay)
+        }
     }
 
     @objc func didRejectLocationRequest() {
@@ -195,7 +245,7 @@ private extension RideSharerViewController {
         }
         if navigationItem.searchController == nil {
             DispatchQueue.main.async { [weak self] in
-                UIView.animate(withDuration: 1.1, delay: 0.0, options: [.allowAnimatedContent, .beginFromCurrentState, .curveEaseInOut, .showHideTransitionViews]) {
+                UIView.animate(withDuration: 1.0, delay: 0.0, options: [.allowAnimatedContent, .beginFromCurrentState, .curveEaseOut, .showHideTransitionViews]) {
                     self?.navigationItem.searchController = self?.searchVC
                     self?.view.layoutIfNeeded()
                 } completion: { _ in
@@ -208,6 +258,26 @@ private extension RideSharerViewController {
         let rideHistoryVc = RideHistoryViewController()
         DispatchQueue.main.async { [weak self] in
             self?.present(rideHistoryVc, animated: true)
+        }
+    }
+
+    @objc func navigateToSearchHistory() {
+        let searchHistoryVC = SearchHistoryViewController(mapSearchVC: self)
+//        searchHistoryVC.updateRideShareVC(using: self)
+        DispatchQueue.main.async { [weak self] in
+            self?.present(searchHistoryVC, animated: true)
+        }
+    }
+
+    @objc func didTapClearMap() {
+        clearMap()
+        guard let coordinate = locationManager.coordinate else { return }
+
+        let region = MKCoordinateRegion(center: coordinate,
+                                        span: .init(latitudeDelta: 0.24, longitudeDelta: 0.24)
+        )
+        DispatchQueue.main.async { [weak self] in
+            self?.mapView.setRegion(region, animated: true)
         }
     }
 

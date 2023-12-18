@@ -1,8 +1,8 @@
 //
-//  MapSearchResultViewController.swift
+//  SearchHistoryViewController.swift
 //  RideShare_DanielEze
 //
-//  Created by Daniel Eze on 2023-12-17.
+//  Created by Daniel Eze on 2023-12-18.
 //  Copyright © 2023 Daniel Eze. All rights reserved.
 //
 
@@ -10,12 +10,24 @@ import Foundation
 import MapKit
 import UIKit
 
-class MapSearchResultViewController: UIViewController {
-    private lazy var searchResults: [MKMapItem] = []
+class SearchHistoryViewController: UIViewController {
 
     private let locationManager = LocationManager.shared
 
-    private lazy var mapSearchVC: RideSharerViewController? = nil
+    private var mapSearchVC: RideSharerViewController?
+
+    var searchHistory: [MKMapItem] {
+        mapSearchVC?.searchHistory ?? []
+    }
+
+    private lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.useAutoLayout()
+        label.text = "Search History 🔍 🕗"
+        label.font = .boldSystemFont(ofSize: 25)
+        label.textAlignment = .left
+        return label
+    }()
 
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero)
@@ -23,16 +35,8 @@ class MapSearchResultViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.showsVerticalScrollIndicator = false
-        tableView.register(ResultCell.self, forCellReuseIdentifier: ResultCell.description())
+        tableView.register(SearchHistoryCell.self, forCellReuseIdentifier: SearchHistoryCell.description())
         return tableView
-    }()
-
-    private lazy var searchCompleter: MKLocalSearchCompleter = {
-        let search = MKLocalSearchCompleter()
-        search.delegate = self
-        search.region = .init(.world)
-        search.resultTypes = [.address, .pointOfInterest]
-        return search
     }()
 
     override func viewDidLoad() {
@@ -41,10 +45,19 @@ class MapSearchResultViewController: UIViewController {
         layout()
     }
 
+    init(mapSearchVC: RideSharerViewController? = nil) {
+        self.mapSearchVC = mapSearchVC
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        searchResults = []
-        tableView.reloadData()
+//        searchResults = []
+//        tableView.reloadData()
     }
 
     func configure() {
@@ -54,24 +67,27 @@ class MapSearchResultViewController: UIViewController {
 
     func layout() {
         view.backgroundColor = .white
+        view.addSubview(titleLabel)
         view.addSubview(tableView)
 
         let margins = view.layoutMarginsGuide
         let constraints: [NSLayoutConstraint] = [
-            tableView.topAnchor.constraint(equalTo: margins.topAnchor, constant: 30),
+            titleLabel.topAnchor.constraint(equalTo: margins.topAnchor, constant: 30),
+            titleLabel.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
+
+            tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
             tableView.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: margins.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: margins.bottomAnchor),
+            tableView.bottomAnchor.constraint(equalTo: margins.bottomAnchor)
         ]
         NSLayoutConstraint.activate(constraints)
     }
 
-    func updatemapSearchVC(using vc: RideSharerViewController) {
+    func updateRideShareVC(using vc: RideSharerViewController) {
         mapSearchVC = vc
     }
 
-    func updateSearchResults(using results: [MKMapItem]) {
-        searchResults = results
+    func updateSearchHistory() {
         tableView.reloadData()
     }
 
@@ -89,18 +105,17 @@ class MapSearchResultViewController: UIViewController {
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-
 }
 
-extension MapSearchResultViewController: UITableViewDelegate, UITableViewDataSource {
+extension SearchHistoryViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        searchResults.count
+        searchHistory.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: ResultCell.description(), for: indexPath) as! ResultCell
-        let title = searchResults.lazy[indexPath.row].name ?? ""
-        let subtitle = searchResults.lazy[indexPath.row].placemark.title ?? " "
+        let cell = tableView.dequeueReusableCell(withIdentifier: SearchHistoryCell.description(), for: indexPath) as! SearchHistoryCell
+        let title = searchHistory.lazy[indexPath.row].name ?? ""
+        let subtitle = searchHistory.lazy[indexPath.row].placemark.title ?? " "
 
         DispatchQueue.main.async {
             cell.setData(title, subtitle)
@@ -109,7 +124,7 @@ extension MapSearchResultViewController: UITableViewDelegate, UITableViewDataSou
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        mapSearchVC?.didSelectResult(result: searchResults.lazy[indexPath.row])
+        mapSearchVC?.didSelectResult(result: searchHistory[indexPath.row], isFromHistory: true)
 
         DispatchQueue.main.async { [weak self] in
             tableView.deselectRow(at: indexPath, animated: true)
@@ -118,9 +133,7 @@ extension MapSearchResultViewController: UITableViewDelegate, UITableViewDataSou
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        ResultCell.size.height
+        SearchHistoryCell.size.height
     }
 
 }
-
-extension MapSearchResultViewController: MKLocalSearchCompleterDelegate { }

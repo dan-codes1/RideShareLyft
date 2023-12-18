@@ -21,7 +21,7 @@ class RideHistoryViewController: UIViewController {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.useAutoLayout()
-        label.text = "Ride History 🕗"
+        label.text = "Ride History 🚙 🕗"
         label.font = .boldSystemFont(ofSize: 25)
         label.textAlignment = .left
         return label
@@ -64,14 +64,14 @@ private extension RideHistoryViewController {
             tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
             tableView.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: margins.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: margins.bottomAnchor),
+            tableView.bottomAnchor.constraint(equalTo: margins.bottomAnchor)
         ]
         NSLayoutConstraint.activate(constraints)
     }
 
     func createRideHistory(at index: Int) -> RideHistory {
-        let driver = rideHistory[index].0
-        let price = rideHistory[index].1
+        let driver = rideHistory.lazy[index].0
+        let price = rideHistory.lazy[index].1
         let rideHistory = RideHistory(driver: driver, price: price)
         return rideHistory
     }
