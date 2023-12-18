@@ -20,7 +20,7 @@ class RideSharerViewController: UIViewController {
     private lazy var titleLabel: UILabel = {
         let label = UILabel(frame: .zero)
         label.useAutoLayout()
-        label.text = "Ride Sharer 🚙"
+        label.text = "Ride Share 🚙"
         label.font = .boldSystemFont(ofSize: 25)
         label.textAlignment = .left
         return label
@@ -161,6 +161,14 @@ private extension RideSharerViewController {
     }
 
     @objc func showLocationAlert() {
+        if navigationItem.searchController != nil {
+            DispatchQueue.main.async { [weak self] in
+                UIView.animate(withDuration: 1.1, delay: 0.0, options: .beginFromCurrentState) {
+                    self?.navigationItem.searchController = nil
+                    self?.view.layoutIfNeeded()
+                } completion: { _ in }
+            }
+        }
 
         let ok = UIAlertAction(title: "Go to settings", style: .default, handler: { [weak self] _ in
             self?.takeUserToSettingsPage()
@@ -171,13 +179,6 @@ private extension RideSharerViewController {
         alert.addAction(cancel)
         DispatchQueue.main.async { [weak self] in
             self?.present(alert, animated: true)
-            if self?.navigationItem.searchController == nil {
-                UIView.animate(withDuration: 1.15, delay: 0.1, options: .allowUserInteraction) {
-                    self?.navigationItem.searchController = self?.searchVC
-                    self?.view.layoutIfNeeded()
-                } completion: { _ in
-                }
-            }
         }
     }
 
@@ -185,13 +186,14 @@ private extension RideSharerViewController {
         
         guard let coordinate = locationManager.coordinate else { return }
         let region = MKCoordinateRegion(center: coordinate,
-                                        span: .init(latitudeDelta: 0.5, longitudeDelta: 0.5)
+                                        span: .init(latitudeDelta: 0.24, longitudeDelta: 0.24)
         )
         DispatchQueue.main.async { [weak self] in
             self?.mapView.setRegion(region, animated: true)
-
-            if self?.navigationItem.searchController == nil {
-                UIView.animate(withDuration: 1.15, delay: 0.1, options: .allowUserInteraction) {
+        }
+        if navigationItem.searchController == nil {
+            DispatchQueue.main.async { [weak self] in
+                UIView.animate(withDuration: 1.15, delay: 0, options: .beginFromCurrentState) {
                     self?.navigationItem.searchController = self?.searchVC
                     self?.view.layoutIfNeeded()
                 } completion: { _ in
