@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		A82E6DF72B2FA7FB0002FF13 /* UIScreen+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82E6DF62B2FA7FB0002FF13 /* UIScreen+Extension.swift */; };
+		A82E6DFC2B30B3600002FF13 /* SearchHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82E6DFB2B30B3600002FF13 /* SearchHistoryViewController.swift */; };
+		A82E6DFE2B30B36F0002FF13 /* SearchHistoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82E6DFD2B30B36F0002FF13 /* SearchHistoryCell.swift */; };
 		A85CCAE82B2ECF4B0061205A /* ResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85CCAE72B2ECF4B0061205A /* ResultCell.swift */; };
 		A89E6F052B2F964600E41C41 /* MapSearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89E6F042B2F964600E41C41 /* MapSearchResultViewController.swift */; };
 		A8E25C962B2D039700451F48 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E25C952B2D039700451F48 /* AppDelegate.swift */; };
@@ -25,6 +27,8 @@
 
 /* Begin PBXFileReference section */
 		A82E6DF62B2FA7FB0002FF13 /* UIScreen+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScreen+Extension.swift"; sourceTree = "<group>"; };
+		A82E6DFB2B30B3600002FF13 /* SearchHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchHistoryViewController.swift; sourceTree = "<group>"; };
+		A82E6DFD2B30B36F0002FF13 /* SearchHistoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchHistoryCell.swift; sourceTree = "<group>"; };
 		A85CCAE72B2ECF4B0061205A /* ResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultCell.swift; sourceTree = "<group>"; };
 		A89E6F042B2F964600E41C41 /* MapSearchResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSearchResultViewController.swift; sourceTree = "<group>"; };
 		A8E25C922B2D039700451F48 /* RideShare_DanielEze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RideShare_DanielEze.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -53,6 +57,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A82E6DFA2B30B33D0002FF13 /* Search History */ = {
+			isa = PBXGroup;
+			children = (
+				A82E6DFB2B30B3600002FF13 /* SearchHistoryViewController.swift */,
+				A82E6DFD2B30B36F0002FF13 /* SearchHistoryCell.swift */,
+			);
+			path = "Search History";
+			sourceTree = "<group>";
+		};
 		A85CCAE62B2ECF1D0061205A /* Map Search Result */ = {
 			isa = PBXGroup;
 			children = (
@@ -86,6 +99,7 @@
 				A85CCAE62B2ECF1D0061205A /* Map Search Result */,
 				A8E25CA92B2D048B00451F48 /* Ride History */,
 				A8E25CBC2B2D2B9900451F48 /* Ride Sharer */,
+				A82E6DFA2B30B33D0002FF13 /* Search History */,
 				A8E25C952B2D039700451F48 /* AppDelegate.swift */,
 				A8E25C972B2D039700451F48 /* SceneDelegate.swift */,
 				A8E25C9E2B2D039800451F48 /* Assets.xcassets */,
@@ -214,6 +228,8 @@
 				A8E25CB22B2D077500451F48 /* RideHistory.swift in Sources */,
 				A85CCAE82B2ECF4B0061205A /* ResultCell.swift in Sources */,
 				A8E25CAB2B2D04B000451F48 /* RideHistoryViewController.swift in Sources */,
+				A82E6DFE2B30B36F0002FF13 /* SearchHistoryCell.swift in Sources */,
+				A82E6DFC2B30B3600002FF13 /* SearchHistoryViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
